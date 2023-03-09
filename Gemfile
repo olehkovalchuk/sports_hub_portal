@@ -62,7 +62,7 @@ group :development do
   gem "web-console"
 
   gem "annotate"
-
+  gem "rspec-rails"
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
 
@@ -75,4 +75,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+  gem 'shoulda-matchers'
 end
