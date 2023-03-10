@@ -3,11 +3,11 @@
 # Table name: subscriptions
 #
 #  id          :bigint           not null, primary key
-#  type        :string
+#  type        :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  category_id :bigint           not null
-#  team_id     :bigint           not null
+#  category_id :bigint
+#  team_id     :bigint
 #
 # Indexes
 #

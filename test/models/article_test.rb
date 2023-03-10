@@ -3,19 +3,19 @@
 # Table name: articles
 #
 #  id           :bigint           not null, primary key
-#  caption      :string
-#  comments     :boolean          default(TRUE)
-#  content      :text
+#  caption      :string           not null
+#  comments     :boolean          default(TRUE), not null
+#  content      :text             not null
 #  file_data    :text
 #  location     :string
-#  main_page    :boolean          default(TRUE)
-#  name         :string
-#  picture_text :string
-#  type         :string           default("article")
+#  main_page    :boolean          default(TRUE), not null
+#  name         :string           not null
+#  picture_text :string           not null
+#  type         :string           default("article"), not null
 #  url_data     :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
-#  author_id    :bigint
+#  author_id    :bigint           not null
 #  category_id  :bigint
 #  team_id      :bigint
 #

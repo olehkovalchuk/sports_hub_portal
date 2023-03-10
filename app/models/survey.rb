@@ -4,8 +4,8 @@
 #
 #  id         :bigint           not null, primary key
 #  due_date   :date
-#  question   :string
-#  status     :string           default("not_published")
+#  question   :string           not null
+#  status     :string           default(NULL)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  author_id  :bigint           not null
@@ -20,8 +20,11 @@
 #
 class Survey < ApplicationRecord
   belongs_to :author, class_name: "User"
-  has_many :answers, class_name: "Answer", foreign_key: "survey_id"
-  has_many :survey_responders, class_name: "SurveyResponder", foreign_key: "survey_id"
-  has_many :responders, through: :survey_responders, source: :user
+  has_many :answers, class_name: "Answer", dependent: :destroy
+  has_many :survey_responders, class_name: "SurveyResponder", dependent: :destroy
+  has_many :responders, through: :survey_responders, source: :user, dependent: :destroy
 
+  validates :question, presence: true
+  validates :due_date, comparison: { greater_than: Date.today }
+  enum :status, { "not_published" => 0, "published" => 1 }, suffix: :survey
 end

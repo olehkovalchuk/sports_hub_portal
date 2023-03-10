@@ -3,7 +3,7 @@
 # Table name: comment_reactions
 #
 #  id         :bigint           not null, primary key
-#  type       :string
+#  type       :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  comment_id :bigint           not null
@@ -22,4 +22,8 @@
 class CommentReaction < ApplicationRecord
   belongs_to :user
   belongs_to :comment
+
+  enum type: { "dislike" => 0, "like" => 1 }
+  
+  validates :type, presence: true
 end

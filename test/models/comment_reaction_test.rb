@@ -3,7 +3,7 @@
 # Table name: comment_reactions
 #
 #  id         :bigint           not null, primary key
-#  type       :string
+#  type       :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  comment_id :bigint           not null

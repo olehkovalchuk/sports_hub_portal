@@ -10,15 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_07_214312) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_10_200715) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "advertisements", force: :cascade do |t|
-    t.string "url"
-    t.string "type", default: "site_wide"
-    t.string "status", default: "inactive"
-    t.bigint "category_id", null: false
+    t.string "url", null: false
+    t.string "type", default: "site_wide", null: false
+    t.string "status", default: "inactive", null: false
+    t.bigint "category_id"
     t.bigint "author_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -35,19 +35,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_07_214312) do
   end
 
   create_table "articles", force: :cascade do |t|
-    t.string "name"
-    t.string "caption"
-    t.text "content"
-    t.string "picture_text"
+    t.string "name", null: false
+    t.string "caption", null: false
+    t.text "content", null: false
+    t.string "picture_text", null: false
     t.string "location"
-    t.boolean "main_page", default: true
-    t.boolean "comments", default: true
-    t.string "type", default: "article"
+    t.boolean "main_page", default: true, null: false
+    t.boolean "comments", default: true, null: false
+    t.string "type", default: "article", null: false
     t.string "url_data"
     t.text "file_data"
     t.bigint "category_id"
     t.bigint "team_id"
-    t.bigint "author_id"
+    t.bigint "author_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_articles_on_author_id"
@@ -56,9 +56,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_07_214312) do
   end
 
   create_table "baners", force: :cascade do |t|
-    t.string "name"
-    t.string "content"
-    t.string "status", default: "not_published"
+    t.string "name", null: false
+    t.string "content", null: false
+    t.string "status", default: "not_published", null: false
     t.bigint "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -74,7 +74,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_07_214312) do
   end
 
   create_table "comment_reactions", force: :cascade do |t|
-    t.string "type"
+    t.string "type", null: false
     t.bigint "user_id", null: false
     t.bigint "comment_id", null: false
     t.datetime "created_at", null: false
@@ -84,9 +84,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_07_214312) do
   end
 
   create_table "comments", force: :cascade do |t|
-    t.text "text"
+    t.text "text", null: false
     t.bigint "article_id", null: false
-    t.bigint "author_id"
+    t.bigint "author_id", null: false
     t.bigint "parent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -106,9 +106,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_07_214312) do
   end
 
   create_table "subscriptions", force: :cascade do |t|
-    t.string "type"
-    t.bigint "category_id", null: false
-    t.bigint "team_id", null: false
+    t.string "type", null: false
+    t.bigint "category_id"
+    t.bigint "team_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_subscriptions_on_category_id"
@@ -116,7 +116,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_07_214312) do
   end
 
   create_table "survey_responders", force: :cascade do |t|
-    t.string "responder_answer"
+    t.string "responder_answer", null: false
     t.bigint "survey_id", null: false
     t.bigint "responder_id", null: false
     t.datetime "created_at", null: false
@@ -127,7 +127,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_07_214312) do
 
   create_table "surveys", force: :cascade do |t|
     t.date "due_date"
-    t.string "question"
+    t.string "question", null: false
     t.string "status", default: "not_published"
     t.bigint "author_id", null: false
     t.datetime "created_at", null: false

@@ -3,13 +3,13 @@
 # Table name: advertisements
 #
 #  id          :bigint           not null, primary key
-#  status      :string           default("inactive")
-#  type        :string           default("site_wide")
-#  url         :string
+#  status      :string           default(NULL), not null
+#  type        :string           default("site_wide"), not null
+#  url         :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  author_id   :bigint           not null
-#  category_id :bigint           not null
+#  category_id :bigint
 #
 # Indexes
 #

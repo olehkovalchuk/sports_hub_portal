@@ -13,12 +13,14 @@
 #  index_categories_on_parent_id  (parent_id)
 #
 class Category < ApplicationRecord
-  has_many :articles, class_name: "Article", foreign_key: "category_id"
-  has_many :teams, class_name: "Team", foreign_key: "categoty_id"
-  has_many :subscriptions, class_name: "Subscriptions", foreign_key: "category_id"
-  has_many :advertisements, class_name: "Advertisements", foreign_key: "category_id"
-  has_many :baners, class_name: "Baner", foreign_key: "category_id"
-  has_many :children, class_name: "Comment", foreign_key: "parent_id"
+  has_many :articles, class_name: "Article"
+  has_many :teams, class_name: "Team"
+  has_many :subscriptions, class_name: "Subscriptions"
+  has_many :advertisements, class_name: "Advertisements"
+  has_many :baners, class_name: "Baner"
+  has_many :children, class_name: "Category", foreign_key: "parent_id"
   
-  belongs_to :parent, class_name: "Comment"              
+  belongs_to :parent, class_name: "Category"  
+
+  validates :name, presence: true, length: {maximum: 255}
 end

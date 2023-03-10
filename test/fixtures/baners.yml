@@ -3,9 +3,9 @@
 # Table name: baners
 #
 #  id          :bigint           not null, primary key
-#  content     :string
-#  name        :string
-#  status      :string           default("not_published")
+#  content     :string           not null
+#  name        :string           not null
+#  status      :string           default(NULL), not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  category_id :bigint           not null

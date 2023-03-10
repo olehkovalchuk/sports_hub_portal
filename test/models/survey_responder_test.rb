@@ -3,7 +3,7 @@
 # Table name: survey_responders
 #
 #  id               :bigint           not null, primary key
-#  responder_answer :string
+#  responder_answer :string           not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  responder_id     :bigint           not null

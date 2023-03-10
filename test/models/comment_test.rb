@@ -3,11 +3,11 @@
 # Table name: comments
 #
 #  id         :bigint           not null, primary key
-#  text       :text
+#  text       :text             not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  article_id :bigint           not null
-#  author_id  :bigint
+#  author_id  :bigint           not null
 #  parent_id  :bigint
 #
 # Indexes

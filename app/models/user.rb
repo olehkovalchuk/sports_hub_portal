@@ -33,12 +33,9 @@ class User < ApplicationRecord
   has_many :comments, class_name: "Comment", foreign_key: "author_id"
   has_many :advertisements, class_name: "Advertisement", foreign_key: "author_id"
   has_many :surveys, class_name: "Survey", foreign_key: "author_id"
-  has_many :survey_responders, class_name: "SurveyResponder", foreign_key: "responder_id"
+  has_many :survey_responders, class_name: "SurveyResponder", foreign_key: "responder_id", dependent: :destroy
   has_many :completed_surveys, through: :survey_responders, source: :survey
-  has_many :comment_reactions, class_name: "CommentReaction", foreign_key: "user_id"
-
-  has_many :objects, through: :join_association, source: :join_association_table_foreign_key_to_objects_table
-
+  has_many :comment_reactions, class_name: "CommentReaction"
 
   validates :first_name, presence: true, length: { maximum: 255 }
   validates :last_name, presence: true, length: { maximum: 255 }

@@ -19,7 +19,8 @@
 #
 class Team < ApplicationRecord
   belongs_to :category
-  has_many :articles, class_name: "Article", foreign_key: "team_id"
-  has_many :subscriptions, class_name: "Subscriptions", foreign_key: "team_id"
+  has_many :articles, class_name: "Article"
+  has_many :subscriptions, class_name: "Subscriptions"
 
+  validates :name, presence: true, length: { maximum: 255 }
 end
