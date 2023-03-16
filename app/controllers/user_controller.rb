@@ -1,4 +1,6 @@
 class UserController < ApplicationController
+  skip_before_action :authenticate_user!, :only => [:new, :create]
+  
   def index
   end
 
@@ -19,4 +21,6 @@ class UserController < ApplicationController
 
   def destroy
   end
+
+  
 end

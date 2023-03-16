@@ -8,6 +8,7 @@
 #  updated_at  :datetime         not null
 #  category_id :bigint
 #  team_id     :bigint
+#  user_id     :bigint
 #
 # Indexes
 #

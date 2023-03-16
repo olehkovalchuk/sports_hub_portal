@@ -11,6 +11,7 @@
 #  main_page    :boolean          default(TRUE), not null
 #  name         :string           not null
 #  picture_text :string           not null
+#  status       :string           default(NULL)
 #  type         :string           default("article"), not null
 #  url_data     :string
 #  created_at   :datetime         not null

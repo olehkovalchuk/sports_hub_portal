@@ -26,5 +26,5 @@ class Survey < ApplicationRecord
 
   validates :question, presence: true
   validates :due_date, comparison: { greater_than: Date.today }
-  enum :status, { "not_published" => 0, "published" => 1 }, suffix: :survey
+  enum :status, { "not_published" => 0, "published" => 1, "closed" => 2}, suffix: :survey
 end

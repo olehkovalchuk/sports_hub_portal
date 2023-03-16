@@ -11,6 +11,7 @@
 #  main_page    :boolean          default(TRUE), not null
 #  name         :string           not null
 #  picture_text :string           not null
+#  status       :string           default(NULL)
 #  type         :string           default("article"), not null
 #  url_data     :string
 #  created_at   :datetime         not null
@@ -49,4 +50,6 @@ class Article < ApplicationRecord
   validates :caption, presence: true, length: { maximum: 255 }
   validates :content, presence: true
   validates :picture_text, presence: true, length: { maximum: 255 }
+
+  enum :status, { "not_published" => 0, "published" => 1 }, suffix: :article
 end
