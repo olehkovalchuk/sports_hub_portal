@@ -2,12 +2,12 @@
 #
 # Table name: teams
 #
-#  id          :bigint           not null, primary key
+#  id          :uuid             not null, primary key
 #  location    :string           default("all")
 #  name        :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  category_id :bigint           not null
+#  category_id :uuid             not null
 #
 # Indexes
 #
@@ -22,5 +22,5 @@ class Team < ApplicationRecord
   has_many :articles, class_name: "Article"
   has_many :subscriptions, class_name: "Subscriptions"
 
-  validates :name, presence: true, length: { maximum: 255 }
+  validates :name, presence: true, length: { maximum: 255 }, uniqueness: { scope: :category_id }
 end

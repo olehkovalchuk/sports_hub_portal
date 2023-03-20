@@ -2,12 +2,12 @@
 #
 # Table name: roles
 #
-#  id            :bigint           not null, primary key
-#  name          :string
+#  id            :uuid             not null, primary key
+#  name          :string           not null
 #  resource_type :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  resource_id   :bigint
+#  resource_id   :uuid
 #
 # Indexes
 #

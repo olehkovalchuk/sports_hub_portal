@@ -2,13 +2,12 @@
 #
 # Table name: subscriptions
 #
-#  id          :bigint           not null, primary key
+#  id          :uuid             not null, primary key
 #  type        :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  category_id :bigint
-#  team_id     :bigint
-#  user_id     :bigint
+#  category_id :uuid
+#  team_id     :uuid
 #
 # Indexes
 #

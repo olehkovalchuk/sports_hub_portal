@@ -2,11 +2,11 @@
 #
 # Table name: answers
 #
-#  id         :bigint           not null, primary key
-#  text       :string
+#  id         :uuid             not null, primary key
+#  text       :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  survey_id  :bigint           not null
+#  survey_id  :uuid             not null
 #
 # Indexes
 #

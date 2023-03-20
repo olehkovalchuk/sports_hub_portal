@@ -1,19 +1,235 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
-Role.create!(name: 'admin')
-Role.create!(name: 'basic')
+require 'faker'
 
-user = User.new(
-  first_name: 'Admin',
-  last_name: 'User',
-  email: 'admin_user@domain.com', 
-  password: '123456789', 
-  password_confirmation: '123456789'
-)
-user.add_role(:admin)
-user.save!
+ROLES_TO_ADD = %w[admin basic].freeze
+TEST_EMAIL = 'admin_user@example.com'.freeze
+TEST_PASSWORD = 'password'.freeze
+USERS = [
+  {
+    # admin user
+    first_name: 'Admin',
+    last_name: 'User',
+    email: TEST_EMAIL, 
+    password: TEST_PASSWORD,
+    role: :admin
+  },
+  {
+    # basic user
+    first_name: 'First',
+    last_name: 'User',
+    email: 'first_user@example.com', 
+    password: TEST_PASSWORD
+  },
+  {
+    # basic user
+    first_name: 'Second',
+    last_name: 'User',
+    email: 'second_user@example.com', 
+    password: TEST_PASSWORD
+  },
+  {
+    # blocked user
+    first_name: 'Blocked',
+    last_name: 'User',
+    email: 'blocked_user@example.com', 
+    password: TEST_PASSWORD,
+    status: 'blocked'
+  },
+].freeze
+
+CATEGORIES = [
+  {
+    name: 'nba',
+    subcategories: %w[north west]
+  },
+  {
+    name: 'nhl',
+    subcategories: %w[suoth east]
+  },
+  {
+    name: 'soccer',
+    subcategories: %w[usa europe south_america]
+  },
+  {
+    name: 'golf',
+    subcategories: %w[usa australia]
+  },
+  {
+    name: 'baseball',
+    subcategories: %w[suoth north east west]
+  },
+  {
+    name: 'nascar'
+  }
+].freeze
+
+def fill_database
+  create_user_roles
+  create_users
+  create_categories
+  create_teams
+  create_articles
+  create_comments_to_articles
+  # add_likes_to_comments
+  create_surveys
+  create_survey_answers
+  create_baners
+end
+
+def create_user_roles
+  ROLES_TO_ADD.each do |role_name|
+    Role.find_or_initialize_by(name: role_name).save!
+  end
+end
+
+def create_users
+  USERS.each do |user|
+    u = User.find_or_initialize_by(email: user[:email])
+    u.first_name = user[:first_name]
+    u.last_name = user[:last_name]
+    u.password = user[:password]
+    u.add_role user[:role] if user[:role].present? 
+    u.status =  user[:status] if user[:status].present? 
+
+    u.save!
+  end
+end
+
+def create_categories
+  CATEGORIES.each do |category|
+    c = Category.find_or_initialize_by(name: category[:name])
+    c.save!
+    return  unless category[:subcategories].present?
+    category[:subcategories].each do |subcategory|
+      s = Category.find_or_initialize_by(name: subcategory)
+      if s.new_record?
+        s.parent_id = c.id
+        s.save!
+      else
+        scope = Category.where(parent_id: c.id).pluck(:name)
+        Category.create!(name: subcategory, parent_id: c.id) if scope.exclude?(subcategory)
+      end
+    end
+  end
+end
+
+def create_teams
+  category_list = Category.childless.or(Category.where.not(parent_id: nil))
+  
+  category_list.each do |category|
+    break if category.teams.count == 3
+    3.times do
+      team = Team.find_or_initialize_by(name: Faker::Team.name)
+      team.location = Faker::Team.state
+      team.category_id = category.id
+      team.save!
+    end
+  end
+end
+
+def create_articles
+  # creates categories articles
+  Category.all.to_a.each do |category|
+    break if category.articles.count == 1
+    article_creation_template(
+      published: 'published',
+      category_id: category.id
+    )
+  end
+
+  # creates teams articles
+  Team.all.to_a.each do |team|
+    break if team.articles.count == 2
+    2.times do
+      article_creation_template(
+        published: 'published',
+        team_id: team.id,
+        category_id: team.category.id
+      )
+    end
+  end
+end
+  
+def article_creation_template(**args)
+  article = Article.find_or_initialize_by(name: Faker::Lorem.sentence)
+  article.caption = Faker::Lorem.sentence(word_count: 7)
+  article.content = Faker::Lorem.paragraph(sentence_count: 20)
+  article.picture_text = Faker::Lorem.sentence(word_count: 2)
+
+  article.article_type = args[:article_type] if args[:article_type]
+  article.comments_on = args[:comments] if args[:comments]
+  article.main_page = args[:main_page] if args[:main_page]
+  article.status = args[:published] if args[:published]
+  article.author_id = User.with_role(:admin).first.id
+  article.team_id = args[:team_id] if args[:team_id]
+  article.category_id = args[:category_id] if args[:category_id]
+  article.save!
+end
+
+def create_comments_to_articles
+  # add comments to articles
+  Article.where(comments_on: true).each do |article|
+    break if article.comments.count == 3
+     # add comments to articles
+    2.times do
+      Comment.create!(
+        text: Faker::Lorem.paragraph,
+        article_id: article.id,
+        author_id: User.pluck(:id).sample,
+      )
+    end
+    # add comment to first article comment
+    Comment.create!(
+      text: Faker::Lorem.paragraph,
+      article_id: article.id,
+      author_id: User.pluck(:id).sample,
+      parent_id: article.comments.ids.first
+    )
+  end
+end
+
+# def add_likes_to_comments
+
+#   Comment.pluck(:id).each do |id|
+#     CommentReaction.create!(
+#       reaction: 'dislike',
+#       comment_id: id,
+#       user_id: User.pluck(:id).first
+#     )
+#   end
+# end
+
+def create_surveys
+  return if Survey.count == 3
+  3.times do
+    Survey.create!(
+      question: Faker::Lorem.question,
+      status: 'published',
+      author_id: User.with_role(:admin).first.id
+    )
+  end
+end
+
+def create_survey_answers
+  Survey.all.each do |survey|
+    return if survey.answers.count == 2
+    2.times do 
+      Answer.create!(
+        text: Faker::Lorem.sentence,
+        survey_id: survey.id
+      )
+    end
+  end
+end
+
+BANER_NAMES = %w[baseball soccer nba]
+def create_baners
+  BANER_NAMES.each do |name|
+    baner = Baner.find_or_initialize_by(name: name)
+    baner.content = Faker::Lorem.paragraph
+    baner.category_id = Category.find_by(name: name).id
+    baner.save!
+    baner.published!
+  end
+end
+
+fill_database

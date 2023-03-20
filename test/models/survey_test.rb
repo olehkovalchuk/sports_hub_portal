@@ -2,13 +2,13 @@
 #
 # Table name: surveys
 #
-#  id         :bigint           not null, primary key
+#  id         :uuid             not null, primary key
 #  due_date   :date
 #  question   :string           not null
-#  status     :string           default(NULL)
+#  status     :integer          default("not_published"), not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  author_id  :bigint           not null
+#  author_id  :uuid             not null
 #
 # Indexes
 #

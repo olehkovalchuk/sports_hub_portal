@@ -10,85 +10,86 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_16_111348) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_20_183632) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  create_table "advertisements", force: :cascade do |t|
+  create_table "advertisements", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "url", null: false
     t.string "type", default: "site_wide", null: false
-    t.string "status", default: "inactive", null: false
-    t.bigint "category_id"
-    t.bigint "author_id", null: false
+    t.integer "status", default: 0, null: false
+    t.uuid "category_id"
+    t.uuid "author_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_advertisements_on_author_id"
     t.index ["category_id"], name: "index_advertisements_on_category_id"
   end
 
-  create_table "answers", force: :cascade do |t|
-    t.string "text"
-    t.bigint "survey_id", null: false
+  create_table "answers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "text", null: false
+    t.uuid "survey_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["survey_id"], name: "index_answers_on_survey_id"
   end
 
-  create_table "articles", force: :cascade do |t|
+  create_table "articles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "caption", null: false
     t.text "content", null: false
     t.string "picture_text", null: false
     t.string "location"
     t.boolean "main_page", default: true, null: false
-    t.boolean "comments", default: true, null: false
-    t.string "type", default: "article", null: false
+    t.boolean "comments_on", default: true, null: false
+    t.integer "status", default: 0
+    t.integer "article_type", default: 0, null: false
     t.string "url_data"
     t.text "file_data"
-    t.bigint "category_id"
-    t.bigint "team_id"
-    t.bigint "author_id", null: false
+    t.uuid "category_id"
+    t.uuid "team_id"
+    t.uuid "author_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "status", default: "not_published"
     t.index ["author_id"], name: "index_articles_on_author_id"
     t.index ["category_id"], name: "index_articles_on_category_id"
     t.index ["team_id"], name: "index_articles_on_team_id"
   end
 
-  create_table "baners", force: :cascade do |t|
+  create_table "baners", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "content", null: false
-    t.string "status", default: "not_published", null: false
-    t.bigint "category_id", null: false
+    t.integer "status", default: 0, null: false
+    t.uuid "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_baners_on_category_id"
   end
 
-  create_table "categories", force: :cascade do |t|
+  create_table "categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
-    t.bigint "parent_id"
+    t.uuid "parent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["parent_id"], name: "index_categories_on_parent_id"
   end
 
-  create_table "comment_reactions", force: :cascade do |t|
-    t.string "type", null: false
-    t.bigint "user_id", null: false
-    t.bigint "comment_id", null: false
+  create_table "comment_reactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "reaction", null: false
+    t.uuid "user_id", null: false
+    t.uuid "comment_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["comment_id"], name: "index_comment_reactions_on_comment_id"
     t.index ["user_id"], name: "index_comment_reactions_on_user_id"
   end
 
-  create_table "comments", force: :cascade do |t|
+  create_table "comments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "text", null: false
-    t.bigint "article_id", null: false
-    t.bigint "author_id", null: false
-    t.bigint "parent_id"
+    t.uuid "article_id", null: false
+    t.uuid "author_id", null: false
+    t.uuid "parent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["article_id"], name: "index_comments_on_article_id"
@@ -96,60 +97,59 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_16_111348) do
     t.index ["parent_id"], name: "index_comments_on_parent_id"
   end
 
-  create_table "roles", force: :cascade do |t|
-    t.string "name"
+  create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
     t.string "resource_type"
-    t.bigint "resource_id"
+    t.uuid "resource_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
 
-  create_table "subscriptions", force: :cascade do |t|
+  create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "type", null: false
-    t.bigint "category_id"
-    t.bigint "team_id"
+    t.uuid "category_id"
+    t.uuid "team_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
     t.index ["category_id"], name: "index_subscriptions_on_category_id"
     t.index ["team_id"], name: "index_subscriptions_on_team_id"
   end
 
-  create_table "survey_responders", force: :cascade do |t|
+  create_table "survey_responders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "responder_answer", null: false
-    t.bigint "survey_id", null: false
-    t.bigint "responder_id", null: false
+    t.uuid "survey_id", null: false
+    t.uuid "responder_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["responder_id"], name: "index_survey_responders_on_responder_id"
     t.index ["survey_id"], name: "index_survey_responders_on_survey_id"
   end
 
-  create_table "surveys", force: :cascade do |t|
+  create_table "surveys", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.date "due_date"
     t.string "question", null: false
-    t.string "status", default: "not_published"
-    t.bigint "author_id", null: false
+    t.integer "status", default: 0, null: false
+    t.uuid "author_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_surveys_on_author_id"
   end
 
-  create_table "teams", force: :cascade do |t|
+  create_table "teams", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "location", default: "all"
-    t.bigint "category_id", null: false
+    t.uuid "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_teams_on_category_id"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "first_name", null: false
     t.string "last_name", null: false
-    t.string "status", default: "active", null: false
+    t.integer "status", default: 1
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -162,8 +162,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_16_111348) do
   end
 
   create_table "users_roles", id: false, force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "role_id"
+    t.uuid "user_id"
+    t.uuid "role_id"
     t.index ["role_id"], name: "index_users_roles_on_role_id"
     t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id"
     t.index ["user_id"], name: "index_users_roles_on_user_id"

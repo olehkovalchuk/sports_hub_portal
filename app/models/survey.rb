@@ -2,13 +2,13 @@
 #
 # Table name: surveys
 #
-#  id         :bigint           not null, primary key
+#  id         :uuid             not null, primary key
 #  due_date   :date
 #  question   :string           not null
-#  status     :string           default(NULL)
+#  status     :integer          default("not_published"), not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  author_id  :bigint           not null
+#  author_id  :uuid             not null
 #
 # Indexes
 #
@@ -25,6 +25,6 @@ class Survey < ApplicationRecord
   has_many :responders, through: :survey_responders, source: :user, dependent: :destroy
 
   validates :question, presence: true
-  validates :due_date, comparison: { greater_than: Date.today }
-  enum :status, { "not_published" => 0, "published" => 1, "closed" => 2}, suffix: :survey
+  validates :due_date, comparison: { greater_than: Date.today }, allow_nil: true
+  enum :status, { "not_published" => 0, "published" => 1, "closed" => 2}
 end

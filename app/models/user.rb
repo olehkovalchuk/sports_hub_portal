@@ -2,7 +2,7 @@
 #
 # Table name: users
 #
-#  id                     :bigint           not null, primary key
+#  id                     :uuid             not null, primary key
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  first_name             :string           not null
@@ -10,7 +10,7 @@
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
-#  status                 :string           default("active"), not null
+#  status                 :integer          default("active")
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
@@ -41,9 +41,16 @@ class User < ApplicationRecord
   validates :last_name, presence: true, length: { maximum: 255 }
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
-  private
+  enum :status, { blocked: 0, active: 1 }
+
+  def admin?
+    self.has_role? :admin
+  end
+
+  private 
 
   def assign_default_role
     self.add_role(:basic) if self.roles.blank?
   end
+  
 end

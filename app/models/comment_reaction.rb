@@ -2,12 +2,12 @@
 #
 # Table name: comment_reactions
 #
-#  id         :bigint           not null, primary key
-#  type       :string           not null
+#  id         :uuid             not null, primary key
+#  reaction   :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  comment_id :bigint           not null
-#  user_id    :bigint           not null
+#  comment_id :uuid             not null
+#  user_id    :uuid             not null
 #
 # Indexes
 #
@@ -23,7 +23,8 @@ class CommentReaction < ApplicationRecord
   belongs_to :user
   belongs_to :comment
 
-  enum type: { "dislike" => 0, "like" => 1 }
+  enum reaction: { "dislike" => 0, "like" => 1 }
   
-  validates :type, presence: true
+  validates :reaction, presence: true
+  validates :reaction, uniqueness: { scope: [:comment_id, :user_id] }
 end

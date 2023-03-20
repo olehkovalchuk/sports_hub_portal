@@ -2,12 +2,12 @@
 #
 # Table name: teams
 #
-#  id          :bigint           not null, primary key
+#  id          :uuid             not null, primary key
 #  location    :string           default("all")
 #  name        :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  category_id :bigint           not null
+#  category_id :uuid             not null
 #
 # Indexes
 #

@@ -2,13 +2,13 @@
 #
 # Table name: comments
 #
-#  id         :bigint           not null, primary key
+#  id         :uuid             not null, primary key
 #  text       :text             not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  article_id :bigint           not null
-#  author_id  :bigint           not null
-#  parent_id  :bigint
+#  article_id :uuid             not null
+#  author_id  :uuid             not null
+#  parent_id  :uuid
 #
 # Indexes
 #
@@ -24,7 +24,7 @@
 class Comment < ApplicationRecord
   belongs_to :article
   belongs_to :author, class_name: "User"
-  belongs_to :parent, class_name: "Comment"              
+  belongs_to :parent, class_name: "Comment", optional: true            
 
   has_many :children, class_name: "Comment", foreign_key: "parent_id", dependent: :destroy
   has_many :comment_reactions, class_name: "CommentReaction", dependent: :destroy

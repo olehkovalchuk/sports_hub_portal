@@ -2,14 +2,14 @@
 #
 # Table name: advertisements
 #
-#  id          :bigint           not null, primary key
-#  status      :string           default(NULL), not null
+#  id          :uuid             not null, primary key
+#  status      :integer          default("inactive"), not null
 #  type        :string           default("site_wide"), not null
 #  url         :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  author_id   :bigint           not null
-#  category_id :bigint
+#  author_id   :uuid             not null
+#  category_id :uuid
 #
 # Indexes
 #

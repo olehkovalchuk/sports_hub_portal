@@ -2,12 +2,12 @@
 #
 # Table name: survey_responders
 #
-#  id               :bigint           not null, primary key
+#  id               :uuid             not null, primary key
 #  responder_answer :string           not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  responder_id     :bigint           not null
-#  survey_id        :bigint           not null
+#  responder_id     :uuid             not null
+#  survey_id        :uuid             not null
 #
 # Indexes
 #

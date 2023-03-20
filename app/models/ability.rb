@@ -1,12 +1,9 @@
 # frozen_string_literal: true
-
 class Ability
   include CanCan::Ability
 
   def initialize(user)
-    
-   
-    if user.has_role? :admin
+    if user.present? && user.has_role?(:admin)
       can [:read, :edit, :destroy], User
       can :manage, Article
       can :manage, Baner
@@ -18,7 +15,7 @@ class Ability
       can :manage, Category
       can :manage, Subscription
       can :read, SurveyResponder
-    elsif user.has_role? :basic
+    elsif user.present? && user.has_role?(:basic)
       can :show, User
       can :update, User, id: user.id
       can :read, Article, status: 'published'

@@ -2,23 +2,23 @@
 #
 # Table name: articles
 #
-#  id           :bigint           not null, primary key
+#  id           :uuid             not null, primary key
+#  article_type :integer          default("article"), not null
 #  caption      :string           not null
-#  comments     :boolean          default(TRUE), not null
+#  comments_on  :boolean          default(TRUE), not null
 #  content      :text             not null
 #  file_data    :text
 #  location     :string
 #  main_page    :boolean          default(TRUE), not null
 #  name         :string           not null
 #  picture_text :string           not null
-#  status       :string           default(NULL)
-#  type         :string           default("article"), not null
+#  status       :integer          default("not_published")
 #  url_data     :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
-#  author_id    :bigint           not null
-#  category_id  :bigint
-#  team_id      :bigint
+#  author_id    :uuid             not null
+#  category_id  :uuid
+#  team_id      :uuid
 #
 # Indexes
 #
@@ -39,17 +39,18 @@ class Article < ApplicationRecord
   DEALBOOK_TYPE = 'dealbook'
   ARTICLE_TYPES = [ARTICLE_TYPE, VIDEO_TYPE, LIFESTYLE_TYPE, DEALBOOK_TYPE].freeze
 
-  belongs_to :category
-  belongs_to :team
+  belongs_to :category, optional: true
+  belongs_to :team, optional: true
   belongs_to :author, class_name: 'User'
 
   has_many :comments, class_name: "Comment", dependent: :destroy
 
-  validates :type, inclusion: { in: ARTICLE_TYPES }
+  validates :article_type, inclusion: { in: ARTICLE_TYPES }
   validates :name, presence: true, length: { maximum: 255 }
   validates :caption, presence: true, length: { maximum: 255 }
   validates :content, presence: true
   validates :picture_text, presence: true, length: { maximum: 255 }
 
-  enum :status, { "not_published" => 0, "published" => 1 }, suffix: :article
+  enum :article_type, { article: 0, video: 1, lifestyle: 2, dealbook: 3 }, suffix: :type
+  enum :status, { not_published: 0, published: 1 }
 end
