@@ -23,8 +23,10 @@ class CommentReaction < ApplicationRecord
   belongs_to :user
   belongs_to :comment
 
-  enum reaction: { "dislike" => 0, "like" => 1 }
+  enum reaction: { dislike: 0, like: 1 }
   
   validates :reaction, presence: true
-  validates :reaction, uniqueness: { scope: [:comment_id, :user_id] }
+  validates :user_id, uniqueness: { scope: [:comment_id] }
 end
+
+

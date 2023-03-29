@@ -2,6 +2,7 @@ class ArticlesController < ApplicationController
   skip_before_action :authenticate_user!, :only => [:index, :show]
 
   def index
+    @articles = Article.published.limit(5)
   end
 
   def new
@@ -11,6 +12,7 @@ class ArticlesController < ApplicationController
   end
 
   def show
+    @article = Article.find(params[:id])
   end
 
   def edit

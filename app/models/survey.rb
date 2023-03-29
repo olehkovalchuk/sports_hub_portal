@@ -22,7 +22,7 @@ class Survey < ApplicationRecord
   belongs_to :author, class_name: "User"
   has_many :answers, class_name: "Answer", dependent: :destroy
   has_many :survey_responders, class_name: "SurveyResponder", dependent: :destroy
-  has_many :responders, through: :survey_responders, source: :user, dependent: :destroy
+  has_many :responders, through: :survey_responders, source: :responder
 
   validates :question, presence: true
   validates :due_date, comparison: { greater_than: Date.today }, allow_nil: true

@@ -80,5 +80,8 @@ group :test do
   gem "webdrivers"
   gem 'shoulda-matchers'
 end
+gem 'ancestry', '~> 4.3', '>= 4.3.2'
+gem 'jsbundling-rails'  # needed for bootstrap javascript
+gem 'cssbundling-rails' # Install bootstrap 5
 
-gem "tailwindcss-rails", "~> 2.0"
+gem 'bootstrap', '~> 5.2.2'

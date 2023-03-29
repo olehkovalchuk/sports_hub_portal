@@ -53,4 +53,6 @@ class Article < ApplicationRecord
 
   enum :article_type, { article: 0, video: 1, lifestyle: 2, dealbook: 3 }, suffix: :type
   enum :status, { not_published: 0, published: 1 }
+
+  
 end

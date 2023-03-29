@@ -7,9 +7,9 @@ class CreateArticles < ActiveRecord::Migration[7.0]
       t.string :picture_text, null: false
       t.string :location
       t.boolean :main_page, default: true, null: false
-      t.boolean :comments, default: true, null: false
+      t.boolean :comments_on, default: true, null: false
       t.integer :status, default: 0
-      t.integer :type, default: "article", null: false
+      t.integer :article_type, default: 0, null: false
       t.string :url_data
       t.text :file_data
       t.references :category, type: :uuid, foreign_key: true

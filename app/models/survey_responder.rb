@@ -21,7 +21,9 @@
 #
 class SurveyResponder < ApplicationRecord
   belongs_to :survey
+  # belongs_to :survey, -> { includes :answer }
   belongs_to :responder, class_name: "User"
 
   validates :responder_answer, presence: true
+  validates :responder_id, uniqueness: { scope: [:survey_id] }
 end

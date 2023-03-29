@@ -43,7 +43,7 @@ CATEGORIES = [
   },
   {
     name: 'nhl',
-    subcategories: %w[suoth east]
+    subcategories: %w[south east]
   },
   {
     name: 'soccer',
@@ -62,6 +62,8 @@ CATEGORIES = [
   }
 ].freeze
 
+BANER_NAMES = %w[baseball soccer nba].freeze
+
 def fill_database
   create_user_roles
   create_users
@@ -69,9 +71,10 @@ def fill_database
   create_teams
   create_articles
   create_comments_to_articles
-  # add_likes_to_comments
+  add_likes_to_comments
   create_surveys
   create_survey_answers
+  create_survey_responders
   create_baners
 end
 
@@ -97,25 +100,23 @@ end
 def create_categories
   CATEGORIES.each do |category|
     c = Category.find_or_initialize_by(name: category[:name])
-    c.save!
+    c.save! if c.new_record?
     return  unless category[:subcategories].present?
     category[:subcategories].each do |subcategory|
       s = Category.find_or_initialize_by(name: subcategory)
       if s.new_record?
-        s.parent_id = c.id
+        s.parent = c
         s.save!
       else
-        scope = Category.where(parent_id: c.id).pluck(:name)
-        Category.create!(name: subcategory, parent_id: c.id) if scope.exclude?(subcategory)
+        scope = c.children.pluck(:name)
+        Category.create!(name: subcategory, parent: c) if scope.exclude?(subcategory)
       end
     end
   end
 end
 
-def create_teams
-  category_list = Category.childless.or(Category.where.not(parent_id: nil))
-  
-  category_list.each do |category|
+def create_teams  
+  Category.last_childs.each do |category|
     break if category.teams.count == 3
     3.times do
       team = Team.find_or_initialize_by(name: Faker::Team.name)
@@ -135,7 +136,6 @@ def create_articles
       category_id: category.id
     )
   end
-
   # creates teams articles
   Team.all.to_a.each do |team|
     break if team.articles.count == 2
@@ -178,25 +178,28 @@ def create_comments_to_articles
       )
     end
     # add comment to first article comment
-    Comment.create!(
+    subcomment = Comment.new(
       text: Faker::Lorem.paragraph,
       article_id: article.id,
       author_id: User.pluck(:id).sample,
-      parent_id: article.comments.ids.first
     )
+    subcomment.parent = article.comments.first
+    subcomment.save!
   end
 end
 
-# def add_likes_to_comments
-
-#   Comment.pluck(:id).each do |id|
-#     CommentReaction.create!(
-#       reaction: 'dislike',
-#       comment_id: id,
-#       user_id: User.pluck(:id).first
-#     )
-#   end
-# end
+def add_likes_to_comments
+  Comment.all.each do |comment|
+    break if comment.reactions.count == 3
+    3.times do |i|
+      CommentReaction.create!(
+        reaction: i < 2 ? 'like' : 'dislike',
+        comment_id: comment.id,
+        user_id: User.pluck(:id)[i]
+      )
+    end
+  end
+end
 
 def create_surveys
   return if Survey.count == 3
@@ -221,7 +224,20 @@ def create_survey_answers
   end
 end
 
-BANER_NAMES = %w[baseball soccer nba]
+def create_survey_responders
+  responders = User.with_role(:basic).pluck(:id)
+  Survey.all.each do |survey|
+    break if survey.responders.count == 2
+    2.times do |i|
+      SurveyResponder.create!(
+        responder_answer: survey.answers.first,
+        responder_id: responders[i],
+        survey_id: survey.id
+      )
+    end
+  end
+end
+
 def create_baners
   BANER_NAMES.each do |name|
     baner = Baner.find_or_initialize_by(name: name)

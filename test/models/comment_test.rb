@@ -3,18 +3,18 @@
 # Table name: comments
 #
 #  id         :uuid             not null, primary key
+#  ancestry   :string
 #  text       :text             not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  article_id :uuid             not null
 #  author_id  :uuid             not null
-#  parent_id  :uuid
 #
 # Indexes
 #
+#  index_comments_on_ancestry    (ancestry)
 #  index_comments_on_article_id  (article_id)
 #  index_comments_on_author_id   (author_id)
-#  index_comments_on_parent_id   (parent_id)
 #
 # Foreign Keys
 #
