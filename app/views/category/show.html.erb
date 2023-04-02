@@ -1,8 +1,10 @@
 <div class="container col-9">
   <h1><%=@category.name.capitalize%></h1>
   <span><%=@category.name.capitalize%> Teams:</span>
+  <% # @category.teams.each %>
   <%@teams.each do |team|%>
     <%= link_to team.name, category_team_path(@category.id, team.id) %>
   <%end%>
+  <% # @category.articles %>
   <%=render_articles(@articles)%>
 </div>

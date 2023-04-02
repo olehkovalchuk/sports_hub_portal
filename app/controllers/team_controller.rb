@@ -10,6 +10,7 @@ class TeamController < ApplicationController
   def create
   end
 
+  # навіщо ми оголошуємо @articles? ми мажмо взяти це вже в середині типу @team.teams
   def show
     @team = Team.find(params[:id])
     @articles = @team.articles
