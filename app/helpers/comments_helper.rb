@@ -22,7 +22,7 @@ module CommentsHelper
   #   out.html_safe
   # end
 
- 
+  # Ну в окремму методі є сенс тільки тоді коли тут є рекурсія) а як її нема то це все мало б  бути у всьюсі)
   def article_comments(comments)
     out = ''
     comment_class = 'p-1 m-1 border'

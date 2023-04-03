@@ -11,6 +11,7 @@ class CategoryController < ApplicationController
   def create
   end
 
+  # навіщо ми оголошуємо @teams та @articles? ми мажмо взяти це вже в середині типу @categoty.teams
   def show
     @categoty = Category.find(params[:id])
     @teams = Team.where(category_id: @categoty.subtree_ids)

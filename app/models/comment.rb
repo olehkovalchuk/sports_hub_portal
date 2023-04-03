@@ -33,6 +33,7 @@ class Comment < ApplicationRecord
 
   validates :text, presence: true
 
+  # Це більше до конешина, по правильному не потрібно ставити is/has і тд, тобто просто root?
   def is_root?
     parent_id.nil?
   end
