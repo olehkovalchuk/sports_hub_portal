@@ -12,9 +12,17 @@
         <a href="#" class="text-reset px-1 bi bi-google"></a>
       </div>
       <div  class="d-flex align-items-center">
+      <% if user_signed_in? %>
+        <div class="text-decoration-none d-block  font-weight-bold link-danger py-3 px-5 m-0 ">
+          <div class="text-danger"><%= current_user.full_name %></div>
+          <div >is signed in</div>
+        </div>
+        <%= link_to 'Sign out', destroy_user_session_path, data: { turbo_method: :delete }, class: 'link-danger py-3 px-5 m-0 border border-danger text-decoration-none' %>
+      <% else %>
         <%= link_to "Sign in", new_user_session_path, class: 'text-decoration-none d-block  font-weight-bold link-danger py-3 px-5 m-0 ' %>
-        <%= link_to "Log in", new_user_session_path, class: 'link-danger py-3 px-5 m-0 border border-danger text-decoration-none' %>
-        <span>EN&#x25BC;</span>
+        <%= link_to "Log in", new_user_registration_path, class: 'link-danger py-3 px-5 m-0 border border-danger text-decoration-none' %>
+      <% end %>
+      <span>EN&#x25BC;</span>
       </div>
     </div>
   </div>

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  resources :subscription, :answers, :advertisement, :baners, :surveys, :survey_answers, :comments, :users
+  
+  resources :subscription, :answers, :advertisement, :baners, :surveys, :survey_answers
 
   resources :category do
     resources :team, only: [:index, :show]
@@ -10,14 +11,14 @@ Rails.application.routes.draw do
   end
   resources :category, only: [:new, :create, :edit, :update, :destroy]
   resources :team, only: [:new, :create, :edit, :update, :destroy]
-  resources :articles
-  # resources :article, only: [:new, :create, :edit, :update, :destroy]
+  resources :articles do
+    resources :comments
+  end
+
   post 'comments_reactions/update'
   
   
   devise_for :users
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
+ 
   root "articles#index"
 end

@@ -13,8 +13,6 @@ class CategoryController < ApplicationController
 
   def show
     @categoty = Category.find(params[:id])
-    @teams = Team.where(category_id: @categoty.subtree_ids)
-    @articles = Article.where(category_id: @categoty.subtree_ids)
   end
 
   def edit

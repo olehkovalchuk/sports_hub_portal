@@ -28,14 +28,16 @@ module CommentsHelper
     comment_class = 'p-1 m-1 border'
     subcomment_class = 'p-1 m-1 ms-5 border'
     content_tag :div, class: "container" do
-      comments.each do |comment|
+      comments.where.not(id: nil).each do |comment|
+        return if comment.new_record?
         if comment.root?
           out << tag.div(class: comment_class) do
             tag.div(comment.text) +
             tag.div(class:'d-flex justify-content-between') do
               tag.div( comment.author.full_name, class: 'text-secondary') +
               tag.div( comment.created_at.strftime("%d-%m-%Y %H:%M"), class: 'text-secondary')
-            end
+            end +
+            comment_actions(comment)
           end
         end
         if comment.has_children?
@@ -53,4 +55,14 @@ module CommentsHelper
       out.html_safe
     end
   end
+
+  def comment_actions(comment)
+    # tag.div(class: '') do
+    #   link_to('Reply', '#', class: "btn btn-light", onclick: "render 'comments/form'") +
+    #   link_to('Edit', article_path(comment.id), class: "btn  btn-light")
+    # end +
+    # render partial: 'comments/form', model: comment.children.build
+    render 'comments/form', model: comment.children.create
+  end
+
 end

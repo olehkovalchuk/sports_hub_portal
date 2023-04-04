@@ -13,6 +13,7 @@ class ArticlesController < ApplicationController
 
   def show
     @article = Article.find(params[:id])
+    # @new_comment = @article.comments.build
   end
 
   def edit

@@ -1,8 +1,8 @@
-<div class="container col-9">
+<div class="container">
   <h1><%=@category.name.capitalize%></h1>
   <span><%=@category.name.capitalize%> Teams:</span>
-  <%@teams.each do |team|%>
+  <%@category.subtree_teams.each do |team|%>
     <%= link_to team.name, category_team_path(@category.id, team.id) %>
   <%end%>
-  <%=render_articles(@articles)%>
+  <%=render_articles(@category.subtree_articles)%>
 </div>

@@ -23,4 +23,11 @@ class Team < ApplicationRecord
   has_many :subscriptions, class_name: "Subscriptions"
 
   validates :name, presence: true, length: { maximum: 255 }, uniqueness: { scope: :category_id }
+
+  
+
+
+  # def self.all_teams
+  #   Team.where(category_id: categoty.subtree_ids)
+  # end
 end

@@ -18,8 +18,8 @@ class Category < ApplicationRecord
 
   has_many :articles, class_name: "Article"
   has_many :teams, class_name: "Team"
-  has_many :subscriptions, class_name: "Subscriptions"
-  has_many :advertisements, class_name: "Advertisements"
+  has_many :subscriptions, class_name: "Subscription"
+  has_many :advertisements, class_name: "Advertisement"
   has_many :baners, class_name: "Baner"
   # has_many :children, class_name: "Category", foreign_key: "parent_id", dependent: :destroy
   
@@ -35,8 +35,7 @@ class Category < ApplicationRecord
   # scope :subcategories, -> { includes(:parent).where.not(parent_id: nil) }
 
   scope :last_childs, -> { Category.where.not(id: Category.pluck(:ancestry).compact.map { |e| e.split('/') }.flatten.uniq) }
-  
- 
+
   def category_name_is_unique
     if parent.try(:has_children?)
       errors.add(:name, 'Duplicate subcategory name') if Category.where(id: parent.child_ids, name: name).exists?
@@ -44,5 +43,13 @@ class Category < ApplicationRecord
     if is_root?
       errors.add(:name, 'Duplicate category name') if  Category.roots.where(name: name).exists?
     end  
+  end
+
+  def subtree_teams
+    Team.where(category_id: self.subtree_ids)
+  end
+  
+  def subtree_articles
+    Article.where(category_id: self.subtree_ids)
   end
 end

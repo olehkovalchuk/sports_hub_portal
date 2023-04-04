@@ -6,7 +6,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "main", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %> 
     
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
@@ -15,9 +15,12 @@
   <body>
     <main class="container border">
       <%= render partial: "/layouts/header" %>
+      <%= render "shared/flashes"%>
       <div class="d-flex justify-content-between">
         <%= render partial: "/layouts/navbar"%>
-        <%= yield %>
+        <div class="container">
+          <%= yield %>
+        </div>
       </div>
     </main>
   </body>
