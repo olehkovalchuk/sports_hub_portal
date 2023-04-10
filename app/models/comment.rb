@@ -30,13 +30,21 @@ class Comment < ApplicationRecord
   has_many :reactions, class_name: "CommentReaction", dependent: :destroy
 
   validates :text, presence: true
+  validate :comment_parent
+  validate :comment_depth
 
   def root?
     parent_id.nil?
   end
 
+  private
 
-  def persisted?
-    false
+  def comment_parent
+    return if parent_id.nil?
+    errors.add(:parent, 'invalid') if parent.nil? || parent.article_id != article_id 
+  end
+  def comment_depth
+    return if depth <= 2
+    errors.add(:comment, 'too deep comment')
   end
 end

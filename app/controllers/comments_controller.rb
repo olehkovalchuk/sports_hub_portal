@@ -5,19 +5,16 @@ class CommentsController < ApplicationController
   
 
   def create
-    if current_user.admin?
-      redirect_to article_path(comment_params[:article_id]), danger: "Admin can't add comments" and return
+    @comment = current_user.comments.new(article: article, **comment_params)
+    if @comment.depth > 2
+      redirect_to article, danger: "And add so deep subcomment"
+      return
     end
-    @comment = Comment.new(
-      text: comment_params[:text], 
-      article_id: params[:article_id], 
-      author_id: current_user.id
-    )
-    @comment.parent = Comment.find(params[:parent_id]) if Comment.exists?(id: params[:parent_id])
-
     respond_to do |format|
-      if @comment.save!
-        format.html { redirect_to @comment.article, success: "Comment added" }
+      if @comment.save
+        format.html { redirect_to article, success: "Comment added" }
+      else
+        format.html { redirect_to article, danger: @comment.errors.first.type }
       end
     end
   end
@@ -26,17 +23,34 @@ class CommentsController < ApplicationController
   end
 
   def update
+    @comment = Comment.find(comment_params[:id])
+    respond_to do |format|
+      if @comment.update(comment_params)
+        format.html { redirect_to article, success: "Comment updated" }
+      end
+    end
   end
 
   def destroy
+    @comment = Comment.find(params[:id])
+    
+    respond_to do |format|
+      if @comment.destroy
+        format.html { redirect_to article, success: "Comment deleted" }
+      end
+    end
+    
   end
 
   private
 
   def comment_params
-    params.require(:comment).permit(:text, :article_id)
+    params.require(:comment).permit(:id, :text, :parent_id)
   end
   
- 
+  def article
+    # @article ||= current_user.articles.find(params[:article_id])
+    @article ||= Article.find(params[:article_id])
+  end
   
 end

@@ -1,0 +1,12 @@
+
+<% if can? :create, model %>
+  <% if model.depth < 2 %>
+    <button class="btn btn-primary reply-comment mx-1 py-0">Reply</button>
+  <%end%>
+<%end%>
+<% if can? :edit, model %>
+  <button class="btn btn-primary edit-comment mx-1 py-0">Edit</button>
+<%end%>
+<% if can? :destroy, model %>
+  <%= link_to('Delete', article_comment_path(model.article.id, model), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: 'btn btn-primary delete-comment mx-1 py-0') %>
+<%end%>

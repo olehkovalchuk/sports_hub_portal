@@ -46,10 +46,10 @@ class Category < ApplicationRecord
   end
 
   def subtree_teams
-    Team.where(category_id: self.subtree_ids)
+    Team.where(category_id: subtree_ids)
   end
   
   def subtree_articles
-    Article.where(category_id: self.subtree_ids)
+    Article.where(category_id: subtree_ids)
   end
 end

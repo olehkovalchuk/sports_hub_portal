@@ -1,7 +1,7 @@
 require 'faker'
 
 ROLES_TO_ADD = %w[admin basic].freeze
-TEST_EMAIL = ' '.freeze
+TEST_EMAIL = 'admin_user@example.com'.freeze
 TEST_PASSWORD = 'password'.freeze
 USERS = [
   {

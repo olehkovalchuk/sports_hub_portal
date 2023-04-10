@@ -35,7 +35,7 @@ class Ability
       can :create, User
       can :read, Article, status: 'published'
       can :show, Baner, status: 'published'
-      can :read, Comment
+      can [:read, :create], Comment
       can :show, Advertisement, status: "active"
       can :read, Team
       can :read, Category

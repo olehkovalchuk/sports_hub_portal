@@ -1,7 +1,10 @@
-<%= form_with(model: [ @article, model ], class: 'input-group mb-3') do |form| %>
-  <%= form.text_field :text, class: 'form-control', placeholder: "Leave your comment" %>
-  <%= hidden_field_tag(:parent_id, model.parent_id) %>
-  <div class="input-group-append">
-    <%= form.submit class: "btn btn-primary" %>
-  </div>
+<% if can? :create, model %>
+  <%= form_with(model: [ @article, model ], class: 'input-group mb-3') do |form| %>
+    <%= form.text_field :text, class: 'form-control', placeholder: "Leave your comment" %>
+    <%= form.hidden_field(:parent_id, value: model.parent_id) %>
+    <%= form.hidden_field(:id, value: model.id) %>
+    <div class="input-group-append">
+      <%= form.submit class: "btn btn-primary" %>
+    </div>
+  <% end %>
 <% end %>
