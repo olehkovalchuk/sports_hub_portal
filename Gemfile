@@ -87,3 +87,5 @@ gem 'cssbundling-rails' # Install bootstrap 5
 gem 'bootstrap', '~> 5.2.2'
 gem 'pry', '~> 0.14.2'
 gem 'webpacker'
+gem 'activeadmin'
+gem 'active_admin-sortable_tree', '~> 2.1'

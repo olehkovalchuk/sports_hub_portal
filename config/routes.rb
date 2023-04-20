@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  
+  root "articles#index"
   resources :subscription, :answers, :advertisement, :baners, :surveys, :survey_answers
 
   resources :category do
@@ -15,10 +15,21 @@ Rails.application.routes.draw do
     resources :comments
   end
 
-  post 'comments_reactions/update'
+  
+  # ActiveAdmin.routes(self)
+  
+  # devise_for :users, ActiveAdmin::Devise.config
   
   
+  devise_for :admin, {class_name: 'User'}.merge(ActiveAdmin::Devise.config)
+  ActiveAdmin.routes(self)    
   devise_for :users
+  resources :users, only: [:show, :edit, :update, :destroy]
+
+  # ActiveAdmin.routes(self)
+  
+
+  
  
-  root "articles#index"
+  
 end

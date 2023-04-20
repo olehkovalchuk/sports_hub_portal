@@ -30,6 +30,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   
   has_many :articles, class_name: "Article", foreign_key: "author_id"
+  # has_many :comments, class_name: "Comment", foreign_key: "author_id", dependent: :destroy
   has_many :comments, class_name: "Comment", foreign_key: "author_id"
   has_many :advertisements, class_name: "Advertisement", foreign_key: "author_id"
   has_many :surveys, class_name: "Survey", foreign_key: "author_id"
@@ -44,11 +45,15 @@ class User < ApplicationRecord
   enum :status, { blocked: 0, active: 1 }
 
   def admin?
-    self.has_role? :admin
+    has_role? :admin
   end
   
   def full_name
     [first_name, last_name].compact.join(' ')
+  end
+
+  def role
+    roles.first.name
   end
 
   private 

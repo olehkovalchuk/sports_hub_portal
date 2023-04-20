@@ -12,7 +12,7 @@ class CategoryController < ApplicationController
   end
 
   def show
-    @categoty = Category.find(params[:id])
+    @category = Category.find(params[:id])
   end
 
   def edit

@@ -4,7 +4,7 @@ class Ability
 
   def initialize(user)
     if user.present? && user.has_role?(:admin)
-      can [:read, :edit, :destroy], User
+      can [:read, :update, :destroy], User
       can :manage, Article
       can :manage, Baner
       can :destroy, Comment

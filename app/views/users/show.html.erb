@@ -1,0 +1,18 @@
+<div class="container border">
+  <h1><%= current_user.full_name  %></h1>
+  <div class="bg-light d-flex justify-content-between align-items-center">
+    <span>Email: </span>
+    <span><%= current_user.email  %> </span>
+  </div>
+  <div class="bg-light d-flex justify-content-between align-items-center">
+    <span>Status: </span>
+    <span><%= current_user.status  %> </span>
+  </div>
+  <div class="bg-light d-flex justify-content-between align-items-center">
+    <span>Role: </span>
+    <span><%= current_user.role  %> </span>
+  </div>
+</div>
+<%= link_to 'Edit account', edit_user_registration_path(current_user), class: 'link-secondary ' %>
+<%= link_to 'Delete account', user_registration_path, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: 'link-secondary ' %>
+<%= link_to "Back", :back %>
